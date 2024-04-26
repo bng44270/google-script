@@ -26,6 +26,12 @@ class Notification {
   set replyTo(v) { this.MSG.replyTo = v; }
 
   send() {
+    var canSend = MailApp.getRemainingDailyQuota() > 0;
+
+    if (!canSend) {
+      throw EvalError("Unable to send message.  Exceeded e-mail quota");
+    }
+    
     var returnValue = false;
 
     if (Object.keys(this.MSG).indexOf('to') > -1 &&
