@@ -3,16 +3,14 @@ class Notification {
     this.MSG = {};
 
     if (toAddr) {
-      this.MSG.to = toAddr;
+      this.to = toAddr;
     }
  
     if (subject) {
-      this.MSG.subject = subject;
+      this.subject = subject;
     }
 
-    if (body) {
-      this.MSG.body = body;
-    }
+    this.body = (body) ? body : '';
  }
 
   get to() { return this.MSG.to; }
@@ -25,6 +23,12 @@ class Notification {
   set body(v) { this.MSG.body = v; }
   set replyTo(v) { this.MSG.replyTo = v; }
 
+  isMsgValid() {
+    return (Object.keys(this.MSG).indexOf('to') > -1 && 
+            Object.keys(this.MSG).indexOf('subject') > -1 &&
+            Object.keys(this.MSG).indexOf('body') > -1);
+  }
+
   send() {
     var canSend = MailApp.getRemainingDailyQuota() > 0;
 
@@ -34,13 +38,33 @@ class Notification {
     
     var returnValue = false;
 
-    if (Object.keys(this.MSG).indexOf('to') > -1 &&
-        Object.keys(this.MSG).indexOf('subject') > -1 &&
-        Object.keys(this.MSG).indexOf('body') > -1) {
+    if (this.isMsgValid()) {
       MailApp.sendEmail(this.MSG);
       returnValue = true;
     }
 
     return returnValue;    
+  }
+}
+
+class HtmlNotification extends Notification {
+  constructor(toAddr,subject,body) {
+    super(toAddr,subject,body);
+  }
+  
+  set body(v) {
+    this.MSG.htmlBody = v;
+    this.MSG.body = this.toPlainText(v);
+  }
+  
+  isMsgValid() {
+    return (Object.keys(this.MSG).indexOf('to') > -1 && 
+            Object.keys(this.MSG).indexOf('subject') > -1 &&
+            Object.keys(this.MSG).indexOf('body') > -1 &&
+            Object.keys(this.MSG).indexOf('htmlBody') > -1);
+  }
+  
+  toPlainText(s) {
+    return s.replace(/<br[ \t]*[/]*>/g,'\n').replace(/<[^>]+>/g,' ').trim();
   }
 }
