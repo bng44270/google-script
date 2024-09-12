@@ -6,6 +6,7 @@
   Usage:
     
     // Instantiate SheetDataDef object with file ID, sheet name, and spreadsheet schema object (if label is not provided the field name will be used)
+    // If it is an empty Sheets file new the columns will be created
     var thisSheet = new SheetDataDef('spreadsheet-id','sheet-name',{
       name : { type : SheetDataDef.StringType, label : 'Name' },
       age : { type : SheetDataDef.NumberType, label : 'Age' },
