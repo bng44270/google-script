@@ -46,11 +46,11 @@ class SheetToSql extends SheetDataDef {
             sheetSchemaOnly[f]['label'] = sheetSchema[f]['label'];
 
             sqlSchema[f] = {}
-            sqlSchema[f]['sqltype'] = ('sqltype' in Object.keys(sheetSchema[f])) ? sheetSchema[f]['sqltype'] : defaultTypeMap.filter(x => x[0] == sheetSchema[f]['type'])[0][1];
+            sqlSchema[f]['sqltype'] = (Object.keys(sheetSchema[f]).indexOf('sqltype') > -1) ? sheetSchema[f]['sqltype'] : defaultTypeMap.filter(x => x[0] == sheetSchema[f]['type'])[0][1];
 
             if (sheetSchema[f]['type'] == DataDef.BooleanType) {
-                sqlSchema[f]['truevalue'] = ('truevalue' in Object.keys(sheetSchema[f])) ? sheetSchema[f]['truevalue'] : '1';
-                sqlSchema[f]['falsevalue'] = ('falsevalue' in Object.keys(sheetSchema[f])) ? sheetSchema[f]['falsevalue'] : '0';
+                sqlSchema[f]['truevalue'] = (Object.keys(sheetSchema[f]).indexOf('truevalue') > -1) ? sheetSchema[f]['truevalue'] : '1';
+                sqlSchema[f]['falsevalue'] = (Object.keys(sheetSchema[f]).indexOf('falsevalue') > -1) ? sheetSchema[f]['falsevalue'] : '0';
             }
         });
 
